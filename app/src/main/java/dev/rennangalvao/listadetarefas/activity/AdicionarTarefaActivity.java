@@ -6,16 +6,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import dev.rennangalvao.listadetarefas.R;
+import dev.rennangalvao.listadetarefas.helper.TarefaDAO;
+import dev.rennangalvao.listadetarefas.model.Tarefa;
 
 public class AdicionarTarefaActivity extends AppCompatActivity {
+
+    private TextInputEditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adicionar_tarefa);
+
+        editText = findViewById(R.id.textTarefa);
     }
 
      // Adicionar menu Salvar
@@ -33,7 +42,13 @@ public class AdicionarTarefaActivity extends AppCompatActivity {
 
         switch ( item.getItemId() ){
             case R.id.action_salvar:
-                Toast.makeText(AdicionarTarefaActivity.this, "Button save held down", Toast.LENGTH_LONG).show();
+                //Executa ação para o item salvar
+                TarefaDAO tarefaDAO = new TarefaDAO( getApplicationContext() );
+
+                Tarefa tarefa = new Tarefa();
+                tarefa.setNomeTarefa("Ir ao mercado");
+                tarefaDAO.salvar( tarefa );
+
                 break;
         }
         return super.onOptionsItemSelected(item);
