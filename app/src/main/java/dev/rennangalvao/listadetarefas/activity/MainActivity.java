@@ -19,6 +19,7 @@ import dev.rennangalvao.listadetarefas.adapter.TarefaAdapter;
 import dev.rennangalvao.listadetarefas.databinding.ActivityMainBinding;
 import dev.rennangalvao.listadetarefas.helper.DbHelper;
 import dev.rennangalvao.listadetarefas.helper.RecyclerItemClickListener;
+import dev.rennangalvao.listadetarefas.helper.TarefaDAO;
 import dev.rennangalvao.listadetarefas.model.Tarefa;
 
 import android.view.Menu;
@@ -50,15 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Configurar recycler
         recyclerView = findViewById(R.id.recyclerView);
-
-        //Class DbHelper
-        DbHelper db = new DbHelper( getApplicationContext() );
-
-        // Registros da tabela
-        ContentValues cv = new ContentValues();
-        cv.put("nome", "teste");
-
-        db.getWritableDatabase().insert( "tarefas", null, cv);
 
         //Adicionar evento de clique
         recyclerView.addOnItemTouchListener(
@@ -96,13 +88,9 @@ public class MainActivity extends AppCompatActivity {
     public void carregarListarTarefas(){
 
         //Listar tarefas
-        Tarefa tarefa1 = new Tarefa();
-        tarefa1.setNomeTarefa("Ir ao mercado");
-        listaTarefas.add( tarefa1);
+        TarefaDAO tarefaDAO = new TarefaDAO( getApplicationContext() );
+        listaTarefas = tarefaDAO.listar();
 
-        Tarefa tarefa2 = new Tarefa();
-        tarefa2.setNomeTarefa("Ir ao Shopping");
-        listaTarefas.add( tarefa2);
         /*
             Exibe lista de tarefas no Recyclerview
          */
