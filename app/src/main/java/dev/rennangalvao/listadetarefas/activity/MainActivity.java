@@ -1,9 +1,11 @@
 package dev.rennangalvao.listadetarefas.activity;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TarefaAdapter tarefaAdapter;
     private List<Tarefa> listaTarefas = new ArrayList<>();
+    private Tarefa tarefaSelecionada;
 
 
 
@@ -60,12 +63,56 @@ public class MainActivity extends AppCompatActivity {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Log.i("click", "onItemClick");
+
+                                //Recuperando tarefa par edicao
+                                Tarefa tarefaSelecionada = listaTarefas.get( position );
+
+                                //Envia tarefa para tela adicionar tarefa
+                                Intent intent = new Intent(MainActivity.this, AdicionarTarefaActivity.class);
+                                intent.putExtra( "tarefaSelecionada", tarefaSelecionada);
+
+                                startActivity( intent );
                             }
 
                             @Override
                             public void onLongItemClick(View view, int position) {
-                                Log.i("click", "onLongItemClick");
+
+                                //Recupera tarefa para deletar
+                                tarefaSelecionada = listaTarefas.get( position );
+
+
+                                AlertDialog.Builder dialog = new AlertDialog.Builder( MainActivity.this);
+
+                                //configurar título e mensagem
+                                dialog.setTitle("Confirmar exclusão");
+                                dialog.setMessage("Deseja excluir a tarefa: " + tarefaSelecionada.getNomeTarefa() + " ? ");
+
+                                dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        TarefaDAO tarefaDAO = new TarefaDAO(getApplicationContext() );
+                                        if (tarefaDAO.deletar( tarefaSelecionada)){
+
+                                            carregarListarTarefas();
+                                            Toast.makeText(getApplicationContext(),
+                                                    "Sucesso ao deletar tarefa!",
+                                                    Toast.LENGTH_LONG).show();
+                                        }else {
+                                            Toast.makeText(getApplicationContext(),
+                                                    "Erro ao excluir tarefa!",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+
+
+                                    }
+                                });
+
+                                dialog.setNegativeButton("Não", null);
+
+                                //Exibir dialog
+                                dialog.create();
+                                dialog.show();
                             }
 
                             @Override
