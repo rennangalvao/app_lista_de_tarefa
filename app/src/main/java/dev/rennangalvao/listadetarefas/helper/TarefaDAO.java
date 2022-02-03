@@ -32,6 +32,7 @@ public class TarefaDAO implements ITarefaDAO{
             Log.i("INFO", "Tarefa salva com sucesso!");
         }catch (Exception e){
             Log.i("INFO", "Erro ao salvar!" + e.getMessage() );
+
             return false;
         }
 
@@ -45,7 +46,7 @@ public class TarefaDAO implements ITarefaDAO{
         try {
             String[] args = {tarefa.getId().toString()};
             whrite.update(DbHelper.TABELA_TAREFAS, cv, "id= ?", args);
-            Log.i("INFO", "Tarefa satualiza com sucesso!");
+            Log.i("INFO", "Tarefa atualiza com sucesso!");
         }catch (Exception e){
             Log.i("INFO", "Erro ao atualizar tarefa!" + e.getMessage() );
             return false;

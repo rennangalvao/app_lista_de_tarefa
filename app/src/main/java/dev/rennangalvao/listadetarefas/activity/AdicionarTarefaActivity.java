@@ -49,50 +49,45 @@ public class AdicionarTarefaActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()) {
+        switch ( item.getItemId() ){
             case R.id.action_salvar:
                 //Executa ação para o item salvar
-                TarefaDAO tarefaDAO = new TarefaDAO(getApplicationContext());
+                TarefaDAO tarefaDAO = new TarefaDAO( getApplicationContext() );
 
-                if (tarefaAtual != null) { //edição
+                if ( tarefaAtual != null){ //edição
                     String nomeTarefa = editText.getText().toString();
-                    if (!nomeTarefa.isEmpty()) {
+                    if (!nomeTarefa.isEmpty()){
+                        finish();
+                        Toast.makeText(getApplicationContext(),
+                                "Sucesso ao atualizar tarefa!",
+                                Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(getApplicationContext(),
+                                "Erro ao atualizar!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }else { //Salvar
+
+                    String nomeTarefa = editText.getText().toString();
+                    if (!nomeTarefa.isEmpty()){
                         Tarefa tarefa = new Tarefa();
                         tarefa.setNomeTarefa(nomeTarefa);
-                        tarefa.setId(tarefaAtual.getId());
 
-                        //atualizar no banco de dados
-                        if (tarefaDAO.atualizar(tarefa)) {
+                        if ( tarefaDAO.salvar( tarefa ) ){
                             finish();
                             Toast.makeText(getApplicationContext(),
                                     "Sucesso ao salvar tarefa!",
                                     Toast.LENGTH_LONG).show();
-                        } else {
+                        }else {
                             Toast.makeText(getApplicationContext(),
                                     "Erro ao salvar!",
                                     Toast.LENGTH_LONG).show();
                         }
-                    } else { //Salvar
-
-                        if (!nomeTarefa.isEmpty()) {
-                            Tarefa tarefa = new Tarefa();
-                            tarefa.setNomeTarefa(nomeTarefa);
-
-                            if (tarefaDAO.salvar(tarefa)) {
-                                finish();
-                                Toast.makeText(getApplicationContext(),
-                                        "Sucesso ao salvar tarefa!",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(),
-                                        "Erro ao salvar!",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        }
                     }
                 }
-            break;
+
+                break;
         }
-            return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 }
