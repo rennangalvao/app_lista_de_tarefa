@@ -1,5 +1,6 @@
 package dev.rennangalvao.listadetarefas.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.rennangalvao.listadetarefas.R;
 import dev.rennangalvao.listadetarefas.adapter.TarefaAdapter;
 import dev.rennangalvao.listadetarefas.databinding.ActivityMainBinding;
+import dev.rennangalvao.listadetarefas.helper.DbHelper;
 import dev.rennangalvao.listadetarefas.helper.RecyclerItemClickListener;
 import dev.rennangalvao.listadetarefas.model.Tarefa;
 
@@ -30,7 +32,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private RecyclerView recyclerView;
     private TarefaAdapter tarefaAdapter;
@@ -50,6 +51,14 @@ public class MainActivity extends AppCompatActivity {
         //Configurar recycler
         recyclerView = findViewById(R.id.recyclerView);
 
+        //Class DbHelper
+        DbHelper db = new DbHelper( getApplicationContext() );
+
+        // Registros da tabela
+        ContentValues cv = new ContentValues();
+        cv.put("nome", "teste");
+
+        db.getWritableDatabase().insert( "tarefas", null, cv);
 
         //Adicionar evento de clique
         recyclerView.addOnItemTouchListener(
